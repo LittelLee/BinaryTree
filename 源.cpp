@@ -1,5 +1,6 @@
 #include<iostream>
 #include<stack>
+#include<queue>
 using namespace std;
 typedef struct node {
 	char value;
@@ -7,7 +8,7 @@ typedef struct node {
 
 }BTreeNode,*BTree;
 
-void createTree(BTree &T)
+void createTree(BTree &T)//以先序创建二叉树
 {
 	char temp;
 	cin >> temp;
@@ -91,6 +92,54 @@ void inOrderWithoutcallback(BTree T)
 		}
 	}
 }
+void postOrderWithoutcallback(BTree T)
+{
+	stack<BTree> S;
+	BTree p = T;
+	S.push(p);
+	S.push(p);
+	while (!S.empty())
+	{
+		p = S.top();
+		S.pop();
+		if (!S.empty() && p == S.top())
+		{
+			if (p->rchild != NULL)
+			{
+				S.push(p->rchild);
+				S.push(p->rchild);
+			}
+			if (p->lchild != NULL)
+			{
+				S.push(p->lchild);
+				S.push(p->lchild);
+			}
+		}
+		else {
+			cout << p->value << " ";
+		}
+	}
+}
+void levelOrder(BTree T)
+{
+	queue<BTree> Q;
+	BTree P;
+	Q.push(T);
+	while(!Q.empty())
+	{
+		P = Q.front();
+		Q.pop();
+		cout << P->value << " ";
+		if (P->lchild != NULL)
+		{
+			Q.push(P->lchild);
+		}
+		if (P->rchild != NULL)
+		{
+			Q.push(P->rchild);
+		}
+	}
+}
 int main()
 {
 	BTree T;
@@ -110,6 +159,12 @@ int main()
 	cout << endl;
 	cout << "inOrder without callback :" << endl;
 	inOrderWithoutcallback(T);
+	cout << endl;
+	cout << "postOrder without callback :" << endl;
+	postOrderWithoutcallback(T);
+	cout << endl;
+	cout << "LevelOrder :" << endl;
+	levelOrder(T);
 	cout << endl;
 	system("pause");
 	return 0;
